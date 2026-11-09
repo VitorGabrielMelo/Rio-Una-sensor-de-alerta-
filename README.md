@@ -1,7 +1,7 @@
 ````markdown
 # Rio-Una-sensor-de-alerta-
 
-Sistema de alerta preventivo para o Rio Una, em Palmares (PE), que avisa a população com antecedência para evitar os danos de uma enchente..
+Sistema de alerta preventivo para o Rio Una, em Palmares (PE), que avisa a população com antecedência para evitar os danos de uma enchente.
 
 ## Problema
 
