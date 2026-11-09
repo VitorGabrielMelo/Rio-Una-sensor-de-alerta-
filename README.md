@@ -1,4 +1,3 @@
-````markdown
 # Rio-Una-sensor-de-alerta-
 
 Sistema de alerta preventivo para o Rio Una, em Palmares (PE), que avisa a população com antecedência para evitar os danos de uma enchente.
@@ -109,4 +108,3 @@ O projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/). As
 ## Licença
 
 Este projeto está sob a licença [MIT](LICENSE).
-````
