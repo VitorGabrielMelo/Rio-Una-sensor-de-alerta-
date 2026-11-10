@@ -1,0 +1,15 @@
+# Limites em metros (valores de exemplo, ajustar com dados reais)
+LIMITE_ATENCAO = 3.0
+LIMITE_ALERTA = 5.0
+LIMITE_EMERGENCIA = 7.0
+
+
+def classificar_nivel(nivel):
+    """Recebe o nível do rio em metros e devolve a situação de risco."""
+    if nivel >= LIMITE_EMERGENCIA:
+        return "EMERGÊNCIA"
+    if nivel >= LIMITE_ALERTA:
+        return "ALERTA"
+    if nivel >= LIMITE_ATENCAO:
+        return "ATENÇÃO"
+    return "NORMAL"
