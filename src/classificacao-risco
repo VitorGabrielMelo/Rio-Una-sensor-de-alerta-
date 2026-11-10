@@ -3,7 +3,7 @@ LIMITE_ATENCAO = 3.0
 LIMITE_ALERTA = 5.0
 LIMITE_EMERGENCIA = 7.0
 
-def classificar_nivel(nivel);
+def classificar_nivel(nivel):
     """Recebe o nivel do rio em metros e devolve a situação de risco."""
     if nivel >= LIMITE_EMERGENCIA:
         return "EMERGENCIA"
