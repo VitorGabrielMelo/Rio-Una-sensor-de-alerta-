@@ -105,6 +105,12 @@ O projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/). As
 
 - MOREIRA, Manoel Simeão; SILVA, Maria Aparecida da. A enchente de 2010 em União dos Palmares-AL: impactos socioambientais em áreas ribeirinhas do Rio Mundaú. *Revista Eletrônica do Curso de Geografia*, Universidade Federal do Ceará. Disponível em: https://periodicos.ufsm.br/reget/article/download/9086/pdf/48008
 
+## Inspirações e créditos
+
+- Projeto original: https://github.com/sagunpandey/ews-station-client-simulator
+- Nosso fork: https://github.com/VitorGabrielMelo/ews-station-client-simulator
+- O que aproveitamos: a ideia de simular vários sensores gerando leituras aleatórias do nível do rio, que inspirou o nosso `src/sensor.py`.
+
 ## Licença
 
 Este projeto está sob a licença [MIT](LICENSE).
