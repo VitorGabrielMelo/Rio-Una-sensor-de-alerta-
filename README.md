@@ -17,14 +17,14 @@ Acompanhar o nível do Rio Una e emitir alertas em diferentes níveis (atenção
 1. Um sensor simulado mede o nível da água em intervalos regulares. A versão atual é virtual, usada para representar o funcionamento do sistema.
 2. Os dados são enviados para um sistema central.
 3. Quando o nível passa de limites pré-definidos, o sistema dispara um alerta.
-4. Os moradores são avisados por [canal de comunicação: SMS, aplicativo, sirene, WhatsApp etc.].
+4. Os moradores são avisados por SMS e WhatsApp (nesta versão, o alerta aparece no terminal como simulação).
 
 **Importante:** este sistema complementa os alertas oficiais, mas não substitui a Defesa Civil. Em caso de emergência, ligue 199 (Defesa Civil) ou 193 (Bombeiros).
 
 ## Funcionalidades
 
-- [ ] Leitura do nível da água do rio
-- [ ] Classificação do risco em níveis (atenção, alerta, emergência)
+- [x] Leitura do nível da água do rio (sensor simulado)
+- [x] Classificação do risco em níveis (normal, atenção, alerta, emergência)
 - [ ] Envio de alertas à população
 - [ ] Histórico de medições
 - [ ] Painel para visualizar o nível atual do rio
@@ -34,16 +34,15 @@ Os itens não marcados são planejados para as próximas versões.
 
 ## Tecnologias
 
-- [Linguagem principal, ex.: Python]
-- [Hardware do sensor, ex.: Arduino, ESP32, sensor ultrassônico]
-- [Banco de dados ou armazenamento, ex.: SQLite, Firebase]
-- [Outras bibliotecas e ferramentas]
+- Python 3.10+
+- Sensor simulado por script Python (sem hardware físico nesta versão)
+- Armazenamento do histórico: planejado para versões futuras
 
 ## Instalação
 
 ### Pré-requisitos
 
-- [Versão da linguagem]
+- Python 3.10 ou superior
 - Git instalado (`git --version`)
 
 ### Passo a passo
@@ -51,19 +50,18 @@ Os itens não marcados são planejados para as próximas versões.
 ```bash
 git clone https://github.com/VitorGabrielMelo/Rio-Una-sensor-de-alerta-.git
 cd Rio-Una-sensor-de-alerta-
-[comandos de instalação das dependências]
 ```
 
 ### Executando
 
 ```bash
-[comando para rodar o projeto]
+python src/sensor.py
 ```
 
 ## Estrutura do projeto
 
 ```
-├── src/          # Código-fonte
+├── src/          # Código-fonte (sensor.py, classificacao.py)
 ├── docs/         # Documentação adicional
 ├── README.md
 ├── CHANGELOG.md
@@ -74,11 +72,20 @@ cd Rio-Una-sensor-de-alerta-
 
 O projeto usa o fluxo GitHub Flow:
 
-1. A branch `main` deve estar sempre estável.
-2. Crie uma branch para cada tarefa, como `feature/nome-da-tarefa` ou `fix/nome-do-erro`.
+1. A branch `main` deve estar sempre estável e nunca recebe commit direto.
+2. Crie uma branch para cada tarefa a partir da `main`.
 3. Faça commits pequenos seguindo o padrão Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`).
 4. Abra um Pull Request para a `main`.
 5. Espere a aprovação de pelo menos um integrante antes de fazer o merge.
+
+### Política de ramificação
+
+- `main`: versão estável
+- `feat/*`: novas funcionalidades
+- `fix/*`: correções de erros
+- `hotfix/*`: correções urgentes na `main`
+- `release/*`: preparação de versões (ex.: `release/1.0.0`)
+- `docs/*`: mudanças apenas de documentação
 
 ## Equipe
 
@@ -95,6 +102,12 @@ O projeto usa o fluxo GitHub Flow:
 
 O projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/). As mudanças de cada versão estão em [CHANGELOG.md](CHANGELOG.md).
 
+## Inspirações e créditos
+
+- Projeto original: https://github.com/sagunpandey/ews-station-client-simulator
+- Nosso fork: https://github.com/VitorGabrielMelo/ews-station-client-simulator
+- O que aproveitamos: a ideia de simular vários sensores gerando leituras aleatórias do nível do rio, que inspirou o nosso `src/sensor.py`.
+
 ## Referências
 
 - SILVA, L. L.; LISTO, F. L. R. Inundações severas no município de Palmares-PE: uma análise comparativa preliminar dos eventos de 2010 e 2017. *GeoUECE*, v. 8, n. 14, 2019. Disponível em: https://revistas.uece.br/index.php/GeoUECE/article/view/1484
@@ -104,12 +117,6 @@ O projeto segue o [Versionamento Semântico](https://semver.org/lang/pt-BR/). As
 - Caso Palmares/PE. Disponível em: https://dialnet.unirioja.es/descarga/articulo/9631896.pdf
 
 - MOREIRA, Manoel Simeão; SILVA, Maria Aparecida da. A enchente de 2010 em União dos Palmares-AL: impactos socioambientais em áreas ribeirinhas do Rio Mundaú. *Revista Eletrônica do Curso de Geografia*, Universidade Federal do Ceará. Disponível em: https://periodicos.ufsm.br/reget/article/download/9086/pdf/48008
-
-## Inspirações e créditos
-
-- Projeto original: https://github.com/sagunpandey/ews-station-client-simulator
-- Nosso fork: https://github.com/VitorGabrielMelo/ews-station-client-simulator
-- O que aproveitamos: a ideia de simular vários sensores gerando leituras aleatórias do nível do rio, que inspirou o nosso `src/sensor.py`.
 
 ## Licença
 
