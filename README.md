@@ -16,8 +16,9 @@ Acompanhar o nível do Rio Una e emitir alertas em diferentes níveis (atenção
 
 1. Um sensor simulado mede o nível da água em intervalos regulares. A versão atual é virtual, usada para representar o funcionamento do sistema.
 2. Os dados são enviados para um sistema central.
-3. Quando o nível passa de limites pré-definidos, o sistema dispara um alerta.
+3. Quando o nível passa de limites pré-definidos, o sistema dispara um alerta. docs/creditos
 4. Os moradores são avisados por SMS e WhatsApp (nesta versão, o alerta aparece no terminal como simulação).
+main
 
 **Importante:** este sistema complementa os alertas oficiais, mas não substitui a Defesa Civil. Em caso de emergência, ligue 199 (Defesa Civil) ou 193 (Bombeiros).
 
@@ -40,10 +41,16 @@ Os itens não marcados são planejados para as próximas versões.
 
 ## Instalação
 
+git clone https://github.com/VitorGabrielMelo/Rio-Una-sensor-de-alerta-.git
+cd Rio-Una-sensor-de-alerta-
+
 ### Pré-requisitos
 
+ docs/creditos
 - Python 3.10 ou superior
 - Git instalado (`git --version`)
+python src/sensor.py
+ main
 
 ### Passo a passo
 
