@@ -7,6 +7,332 @@
 <style>
 :root{--bg:#071724;--panel:#102638;--panel2:#17374c;--green:#20d4a5;--yellow:#f5b942;--orange:#f07835;--red:#ed5151;--text:#f2f7fa;--muted:#9bb0be;--border:#29495c}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}header{height:74px;background:#0c2030;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 max(24px,5%)}.logo{font-size:22px;font-weight:800;color:var(--green);letter-spacing:1px}.logo span{color:#fff}.header-right{color:var(--muted);font-size:13px}.container{max-width:1250px;margin:auto;padding:30px 20px}.intro{margin-bottom:24px}.intro h1{font-size:27px;margin-bottom:8px}.intro p{color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.card,.panel{background:var(--panel);border:1px solid var(--border);border-radius:12px}.card{padding:20px}.card-label{color:var(--muted);font-size:13px;margin-bottom:14px}.card-value{font-size:30px;font-weight:bold}.card-description{color:var(--muted);font-size:12px;margin-top:10px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);margin-right:7px}.status{display:inline-block;padding:8px 13px;border-radius:6px;font-weight:bold;font-size:12px;background:#075d49;color:#8dffdc}.status.atencao{background:#695018;color:#ffe09a}.status.alerta{background:#713b20;color:#ffc39b}.status.emergencia{background:#702c32;color:#ffb0b0}.layout{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}.panel{padding:22px;margin-bottom:18px}.panel h2{font-size:17px;margin-bottom:20px}.level-number{font-size:48px;font-weight:bold;margin:15px 0}.progress{height:15px;background:#263d4e;border-radius:20px;overflow:hidden;margin:15px 0 10px}.progress-fill{height:100%;width:24%;background:var(--green);transition:.4s}.scale{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.thresholds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:22px}.threshold{padding:12px;background:var(--panel2);border-radius:8px;font-size:12px}.threshold strong{display:block;margin-bottom:6px}.yellow{color:var(--yellow)}.orange{color:var(--orange)}.red{color:var(--red)}button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:bold;background:var(--green);color:#06251e;transition:.2s}button:hover{filter:brightness(1.12)}button:focus-visible{outline:3px solid #fff;outline-offset:2px}button.secondary{background:#244357;color:#fff}button.danger{background:#8b343b;color:#fff}.controls{display:flex;flex-wrap:wrap;gap:9px}.sensor-box{background:var(--panel2);border-radius:9px;padding:15px;margin-bottom:15px}.sensor-box p{color:var(--muted);font-size:13px;margin:6px 0}.sensor-box strong{color:var(--green)}canvas{width:100%;height:230px;display:block}.chart-legend{display:flex;gap:15px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-top:10px}.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:13px 10px;text-align:left;border-bottom:1px solid var(--border)}th{color:var(--muted)}.table-wrap{overflow-x:auto}.alert-item{border-left:3px solid var(--yellow);padding:12px;background:var(--panel2);border-radius:5px;margin-bottom:10px;font-size:13px}.alert-item.alerta{border-color:var(--orange)}.alert-item.emergencia{border-color:var(--red)}.alert-item small{display:block;color:var(--muted);margin-top:6px}.empty{text-align:center;padding:20px;color:var(--muted);font-size:13px}.notice{padding:18px;background:#3e3218;border:1px solid #80652c;border-radius:10px;color:#ffe2a0;line-height:1.6;font-size:13px;margin-top:20px}footer{text-align:center;padding:25px;color:var(--muted);border-top:1px solid var(--border);font-size:12px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}@media(max-width:500px){header{padding:0 15px}.header-right{display:none}.grid{grid-template-columns:1fr 1fr}.card{padding:14px}.card-value{font-size:24px}.container{padding:20px 12px}.thresholds{grid-template-columns:1fr}button{flex:1}.level-number{font-size:40px}}
 </style>
+<style>
+:root {
+  --ease-out: cubic-bezier(.2,.75,.25,1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: #315466 #071724;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 85% 8%, rgba(32,212,165,.08), transparent 24rem),
+    radial-gradient(circle at 10% 40%, rgba(50,124,158,.08), transparent 28rem),
+    var(--bg);
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  background: rgba(12,32,48,.88);
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  transition: box-shadow .25s ease, background .25s ease;
+}
+
+.logo {
+  position: relative;
+  text-shadow: 0 0 24px rgba(32,212,165,.22);
+}
+
+.logo::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 5px rgba(32,212,165,.08), 0 0 18px var(--green);
+  vertical-align: 2px;
+  animation: logoPulse 2.4s ease-in-out infinite;
+}
+
+.container {
+  position: relative;
+}
+
+.intro h1 {
+  letter-spacing: -.02em;
+  background: linear-gradient(90deg, #fff 30%, #b9d0dc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grid {
+  perspective: 800px;
+}
+
+.card,
+.panel {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(91,137,159,.38);
+  box-shadow: 0 12px 32px rgba(0,0,0,.08);
+  transition:
+    transform .35s var(--ease-out),
+    border-color .35s ease,
+    box-shadow .35s ease,
+    background .35s ease;
+}
+
+.card::after,
+.panel::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: 0;
+  width: 36%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.035), transparent);
+  transform: skewX(-18deg);
+  transition: left .75s var(--ease-out);
+}
+
+.card:hover,
+.panel:hover {
+  transform: translateY(-3px);
+  border-color: rgba(103,173,190,.48);
+  box-shadow: 0 18px 38px rgba(0,0,0,.16);
+}
+
+.card:hover::after,
+.panel:hover::after {
+  left: 110%;
+}
+
+.card {
+  transform-style: preserve-3d;
+}
+
+.card-value,
+.level-number,
+.status,
+.dot,
+.progress-fill {
+  transition: all .45s var(--ease-out);
+}
+
+.dot {
+  box-shadow: 0 0 0 0 rgba(32,212,165,.55);
+  animation: sensorPulse 2s ease-out infinite;
+}
+
+.status {
+  position: relative;
+  box-shadow: inset 0 1px rgba(255,255,255,.08);
+}
+
+.progress {
+  position: relative;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px),
+    #263d4e;
+  background-size: 20% 100%;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,.18);
+}
+
+.progress-fill {
+  position: relative;
+  min-width: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 18px rgba(32,212,165,.25);
+  transition: width .75s var(--ease-out), background .45s ease;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.32), transparent);
+  transform: translateX(-100%);
+  animation: progressShine 3.2s ease-in-out infinite;
+}
+
+.threshold {
+  transition: transform .25s var(--ease-out), background .25s ease;
+}
+
+.threshold:hover {
+  transform: translateY(-2px);
+  background: #1d4055;
+}
+
+button {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 7px 16px rgba(0,0,0,.12);
+  transition: transform .22s var(--ease-out), filter .22s ease, box-shadow .22s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.18);
+}
+
+button:active {
+  transform: translateY(0) scale(.97);
+}
+
+button::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.45);
+  opacity: 0;
+  transform: scale(1);
+  pointer-events: none;
+  transition: opacity .5s, transform .5s;
+  left: var(--ripple-x, 50%);
+  top: var(--ripple-y, 50%);
+}
+
+button.rippling::after {
+  opacity: 1;
+  transform: scale(18);
+  transition: none;
+  animation: rippleOut .55s ease-out forwards;
+}
+
+.sensor-box,
+.alert-item {
+  border: 1px solid rgba(91,137,159,.12);
+  transition: transform .25s var(--ease-out), border-color .25s ease;
+}
+
+.sensor-box:hover,
+.alert-item:hover {
+  transform: translateX(3px);
+  border-color: rgba(91,137,159,.3);
+}
+
+.alert-item {
+  animation: alertEnter .45s var(--ease-out) both;
+}
+
+canvas {
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+
+canvas.chart-refresh {
+  opacity: .45;
+}
+
+.table-wrap {
+  border-radius: 8px;
+}
+
+tbody tr {
+  transition: background .2s ease, transform .2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(32,212,165,.035);
+}
+
+.notice {
+  position: relative;
+  overflow: hidden;
+  border-left: 3px solid var(--yellow);
+}
+
+.notice::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  right: -80px;
+  bottom: -100px;
+  border-radius: 50%;
+  background: rgba(245,185,66,.09);
+  filter: blur(3px);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .65s var(--ease-out), transform .65s var(--ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.number-change {
+  animation: numberChange .38s var(--ease-out);
+}
+
+.status-emergency {
+  animation: emergencyPulse 1.35s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  50% { opacity: .72; transform: scale(.82); box-shadow: 0 0 0 8px rgba(32,212,165,.04), 0 0 14px var(--green); }
+}
+
+@keyframes sensorPulse {
+  70% { box-shadow: 0 0 0 7px rgba(32,212,165,0); }
+  100% { box-shadow: 0 0 0 0 rgba(32,212,165,0); }
+}
+
+@keyframes progressShine {
+  0%, 20% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(280%); }
+}
+
+@keyframes alertEnter {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes rippleOut {
+  to { opacity: 0; transform: scale(24); }
+}
+
+@keyframes numberChange {
+  0% { opacity: .3; transform: translateY(5px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes emergencyPulse {
+  50% { box-shadow: 0 0 22px rgba(237,81,81,.28); filter: brightness(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+</style>
 </head>
 <body>
 <header><div class="logo">RIO <span>UNA</span></div><div class="header-right">MONITORAMENTO PREVENTIVO · PALMARES - PE</div></header>
@@ -53,6 +379,97 @@ function mostrarAlertas(){const area=$("alertas");if(!alertas.length){area.inner
 function desenharGrafico(){const canvas=$("grafico"),ctx=canvas.getContext("2d"),largura=canvas.clientWidth||300,altura=230,escala=window.devicePixelRatio||1;canvas.width=largura*escala;canvas.height=altura*escala;ctx.setTransform(escala,0,0,escala,0,0);ctx.clearRect(0,0,largura,altura);const margem=30,areaAltura=altura-45,areaLargura=largura-margem-10;ctx.font="11px Arial";ctx.textAlign="right";for(let i=0;i<=5;i++){const y=altura-25-(i/5)*areaAltura;ctx.strokeStyle="#294354";ctx.beginPath();ctx.moveTo(margem,y);ctx.lineTo(largura-5,y);ctx.stroke();ctx.fillStyle="#91a8b7";ctx.fillText(i+"m",margem-7,y+4)}[2,4].forEach((valor,index)=>{const y=altura-25-(valor/5)*areaAltura;ctx.strokeStyle=index===0?"#f5b942":"#ed5151";ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(margem,y);ctx.lineTo(largura-5,y);ctx.stroke();ctx.setLineDash([])});const dados=historico.slice(0,20).reverse();if(!dados.length)return;const passo=dados.length>1?areaLargura/(dados.length-1):0;ctx.beginPath();dados.forEach((item,i)=>{const x=margem+i*passo,y=altura-25-(item.nivel/5)*areaAltura;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle="#20d4a5";ctx.lineWidth=3;ctx.stroke();dados.forEach((item,i)=>{const x=margem+i*passo,y=altura-25-(item.nivel/5)*areaAltura;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=cor(item.nivel);ctx.fill()})}
 let resizeTimer;window.addEventListener("resize",()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(desenharGrafico,100)});
 if(historico.length){nivel=Number(historico[0].nivel)||1.2;ultimaSituacao=situacao(nivel)}mostrarAlertas();atualizar();
+</script>
+<script>
+"use strict";
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelectorAll(".card, .panel, .intro, .threshold").forEach((element, index) => {
+  element.classList.add("reveal");
+  element.style.transitionDelay = prefersReducedMotion ? "0ms" : `${Math.min(index * 55, 220)}ms`;
+});
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: .12 });
+
+document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
+
+const levelTargets = [document.getElementById("nivelCard"), document.getElementById("nivelGrande")];
+const levelObserver = new MutationObserver(() => {
+  levelTargets.forEach(target => {
+    if (!target) return;
+    target.classList.remove("number-change");
+    requestAnimationFrame(() => target.classList.add("number-change"));
+  });
+});
+
+levelTargets.forEach(target => {
+  if (target) levelObserver.observe(target, { childList: true, characterData: true, subtree: true });
+});
+
+document.querySelectorAll(".card").forEach(card => {
+  if (prefersReducedMotion) return;
+  card.addEventListener("mousemove", event => {
+    if (window.innerWidth < 850) return;
+    const rect = card.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - .5;
+    const y = (event.clientY - rect.top) / rect.height - .5;
+    card.style.transform = `translateY(-3px) rotateX(${y * -2.2}deg) rotateY(${x * 2.2}deg)`;
+  });
+  card.addEventListener("mouseleave", () => {
+    card.style.transform = "";
+  });
+});
+
+document.querySelectorAll("button").forEach(button => {
+  button.addEventListener("click", event => {
+    const rect = button.getBoundingClientRect();
+    button.style.setProperty("--ripple-x", `${event.clientX - rect.left}px`);
+    button.style.setProperty("--ripple-y", `${event.clientY - rect.top}px`);
+    button.classList.remove("rippling");
+    void button.offsetWidth;
+    button.classList.add("rippling");
+  });
+});
+
+const header = document.querySelector("header");
+const updateHeader = () => {
+  header.style.boxShadow = window.scrollY > 12
+    ? "0 12px 34px rgba(0,0,0,.22)"
+    : "0 10px 30px rgba(0,0,0,.08)";
+};
+window.addEventListener("scroll", updateHeader, { passive: true });
+
+const statusObserver = new MutationObserver(() => {
+  const emergencyStatus = document.querySelectorAll(".status.emergencia");
+  emergencyStatus.forEach(status => status.classList.add("status-emergency"));
+  document.querySelectorAll(".status:not(.emergencia)").forEach(status => status.classList.remove("status-emergency"));
+});
+
+document.querySelectorAll(".status").forEach(status => {
+  statusObserver.observe(status, { attributes: true, attributeFilter: ["class"] });
+});
+
+const originalDraw = window.desenharGrafico;
+window.desenharGrafico = function() {
+  const canvas = document.getElementById("grafico");
+  if (canvas) canvas.classList.add("chart-refresh");
+  if (typeof originalDraw === "function") originalDraw();
+  requestAnimationFrame(() => {
+    if (canvas) canvas.classList.remove("chart-refresh");
+  });
+};
+
+window.addEventListener("load", () => {
+  if (typeof window.desenharGrafico === "function") window.desenharGrafico();
+});
 </script>
 </body>
 </html>
